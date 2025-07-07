@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equation Solver</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <h1>Handwritten Equation Solver</h1>
+        <p>Upload or draw a mathematical equation to detect and solve it using OCR.</p>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <a href="{{ url_for('upload_image') }}" class="btn btn-primary btn-lg">Upload Image</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('canvas_image') }}" class="btn btn-secondary btn-lg">Draw Equation</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

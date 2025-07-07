@@ -1,0 +1,13 @@
+body {
+    background-color: #f8f9fa;
+}
+.container {
+    max-width: 800px;
+}
+canvas {
+    background-color: white;
+}
+.alert {
+    max-width: 500px;
+    margin: auto;
+}
