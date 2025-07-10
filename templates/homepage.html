@@ -3,23 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equation Solver</title>
+    <title>QuickRevise - Equation Solver</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .hero-box {
+            margin-top: 5rem;
+            padding: 3rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-box:hover {
+            transform: scale(1.01);
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.25rem;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+        }
+
+        @media (max-width: 768px) {
+            .btn-lg {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container text-center mt-5">
-        <h1>Handwritten Equation Solver</h1>
-        <p>Upload or draw a mathematical equation to detect and solve it using OCR.</p>
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <a href="{{ url_for('upload_image') }}" class="btn btn-primary btn-lg">Upload Image</a>
-            </div>
-            <div class="col-md-6">
-                <a href="{{ url_for('canvas_image') }}" class="btn btn-secondary btn-lg">Draw Equation</a>
-            </div>
+    <!-- Header/Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">QuickRevise</a>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="hero-box text-center">
+            <h1 class="mb-3">🧮 Handwritten Equation Solver</h1>
+            <p class="mb-4 fs-5">Upload a mathematical equation image, and we'll detect & solve it using OCR.</p>
+            <a href="{{ url_for('upload_image') }}" class="btn btn-primary btn-lg w-100">📤 Upload Image</a>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
