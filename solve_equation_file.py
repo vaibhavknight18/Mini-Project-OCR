@@ -1,56 +1,62 @@
-# solve_equation_file.py
-from sympy import symbols, Eq, solve, sympify
+from sympy import symbols, Eq, solve, sympify, sqrt
+import unicodedata
+
+def normalize_equation(equation_str):
+    """Normalize equation to handle styled input characters."""
+    return unicodedata.normalize('NFKD', equation_str)
 
 def solve_equation(equation_str):
-    """Solve a mathematical equation using sympy."""
+    """Solve a mathematical equation including linear and quadratic equations."""
     try:
-        # Log input for debugging
+        equation_str = normalize_equation(equation_str)
         print(f"Input equation: {equation_str}")
 
-        # Ensure equation contains '='
         if '=' not in equation_str:
             raise ValueError("Equation must contain '='")
 
-        # Split into left and right sides
         left_side, right_side = equation_str.split('=')
-        left_side = left_side.strip()
-        right_side = right_side.strip()
+        left_side = left_side.strip().replace('^', '**').replace('−', '-').replace('÷', '/')
+        right_side = right_side.strip().replace('^', '**').replace('−', '-').replace('÷', '/')
 
-        # Detect variable (x or y)
+        # Detect variable
         equation_lower = equation_str.lower()
         variable = 'x' if 'x' in equation_lower else 'y'
         var = symbols(variable)
 
-        # Preprocess to handle OCR issues
-        left_side = left_side.replace('^', '**').replace(' ', '').replace('−', '-').replace('÷', '/')
-        right_side = right_side.replace('^', '**').replace(' ', '').replace('−', '-').replace('÷', '/')
-        # Handle implicit multiplication (e.g., "3y" -> "3*y")
-        if variable in left_side:
-            left_side = left_side.replace(variable, f'*{variable}')
-            left_side = left_side.replace(f'*{variable}**', f'{variable}**')  # Fix power terms
-        if variable in right_side:
-            right_side = right_side.replace(variable, f'*{variable}')
-            right_side = right_side.replace(f'*{variable}**', f'{variable}**')
-        # Handle superscripts (e.g., "y2" -> "y**2")
-        left_side = left_side.replace(f'{variable}2', f'{variable}**2')
-        right_side = right_side.replace(f'{variable}2', f'{variable}**2')
-
-        print(f"Preprocessed left: {left_side}, right: {right_side}")  # Debug
-
-        # Parse expressions with sympify
+        # Use sympy to parse
         left_expr = sympify(left_side, locals={variable: var})
         right_expr = sympify(right_side, locals={variable: var})
-
-        # Create and solve equation
         eq = Eq(left_expr, right_expr)
-        solution = solve(eq, var)
 
-        # Convert solution to string
-        result = str(solution) if solution else "No solution found"
-        print(f"Solution: {result}")  # Debug
+        poly_expr = (left_expr - right_expr)
+        poly = poly_expr.as_poly(var)
+
+        if poly is not None and poly.degree() == 2:
+            # Quadratic case
+            a, b, c = poly.all_coeffs()
+            discriminant = b**2 - 4*a*c
+            print(f"Quadratic Detected: a={a}, b={b}, c={c}, Discriminant={discriminant}")
+
+            if discriminant > 0:
+                root1 = (-b + sqrt(discriminant)) / (2*a)
+                root2 = (-b - sqrt(discriminant)) / (2*a)
+                result = f"Quadratic equation detected. Two real roots: {root1}, {root2}"
+            elif discriminant == 0:
+                root = -b / (2*a)
+                result = f"Quadratic equation detected. One real root: {root}"
+            else:
+                root1 = (-b + sqrt(discriminant)) / (2*a)
+                root2 = (-b - sqrt(discriminant)) / (2*a)
+                result = f"Quadratic equation detected. Complex roots: {root1}, {root2}"
+        else:
+            # Fallback to general solver
+            solution = solve(eq, var)
+            result = str(solution) if solution else "No solution found"
+
+        print(f"Solution: {result}")
         return result
 
     except Exception as e:
         error_msg = f"Error solving equation: {str(e)}"
-        print(error_msg)  # Debug
+        print(error_msg)
         return error_msg
